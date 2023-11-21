@@ -7,8 +7,10 @@ from .serializers import *
 
 class ListCategoryView(GenericAPIView, ListModelMixin):
     queryset = Category.objects.all()
-    serializers = CategorySerializer
+    serializer_class = CategorySerializer
 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 def index(request):
