@@ -11,6 +11,8 @@ django = "^4.2.7"
 psycopg2 = "^2.9.9"
 djangorestframework = "^3.14.0"
 django-mptt = "^0.15.0"
+django-cors-headers = "^4.3.1"
+django-filter = "^23.4"
 
 
 [build-system]
