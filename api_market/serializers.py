@@ -7,6 +7,7 @@ class FilterReviewSerializer(serializers.ListSerializer):
         data = data.filter(parent=None)
         return super().to_representation(data)
 
+
 class RecursiveSerializer(serializers.Serializer):
     def to_representation(self, value):
         serializers = self.parent.parent.__class__(value, context = self.context)
