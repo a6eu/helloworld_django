@@ -49,7 +49,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    rating_total = models.DecimalField(max_digits=5, decimal_places=2)
+    rating_total = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     brand = models.ForeignKey('Brand', on_delete=models.SET_NULL, null=True)
     img_url = models.CharField(max_length=255)

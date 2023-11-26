@@ -21,17 +21,28 @@ def index(request):
     return HttpResponse("Salem Alem")
 
 
-class ProductDetailView(GenericAPIView, RetrieveModelMixin):
+class ProductDetailView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductDetailSerializer
+    serializer_class = None
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return ProductUpdateSerializer
+        return ProductDetailSerializer
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
-class ProductListView(ListModelMixin, GenericAPIView):
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class ProductListCreateVeiew(ListModelMixin, CreateModelMixin, GenericAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductDetailSerializer
+    serializer_class = ProductSearchCreateSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_class = ProductFilter
     search_fields = ['name', 'description']
@@ -39,5 +50,7 @@ class ProductListView(ListModelMixin, GenericAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 

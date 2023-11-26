@@ -7,6 +7,7 @@ class FilterReviewSerializer(serializers.ListSerializer):
         data = data.filter(parent=None)
         return super().to_representation(data)
 
+
 class RecursiveSerializer(serializers.Serializer):
     def to_representation(self, value):
         serializers = self.parent.parent.__class__(value, context=self.context)
@@ -28,10 +29,24 @@ class BrandSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProductDetailSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(slug_field='name', read_only=True)
-    brand = BrandSerializer(read_only=True)
+class ProductSearchCreateSerializer(serializers.ModelSerializer):
+    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all())
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    class Meta:
+        model = Product
+        fields = '__all__'
 
+
+class ProductUpdateSerializer(serializers.ModelSerializer):
+    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all())
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    brand = BrandSerializer(read_only=True)
     class Meta:
         model = Product
         fields = '__all__'
