@@ -4,17 +4,17 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 class UserProfileManager(BaseUserManager):
 
-    def create_user(self, email, username, password=None):
+    def create_user(self, first_name, last_name, phone_number, email, password=None):
         if not email:
             raise ValueError('Users must have an email')
         email = self.normalize_email(email)
-        user = self.model(email=email, username=username)
+        user = self.model(first_name=first_name, last_name=last_name, phone_number=phone_number, email=email, username=email)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password):
-        user = self.create_user(email, username, password)
+    def create_superuser(self, first_name, last_name, phone_number, email, password):
+        user = self.create_user(first_name, last_name, phone_number, email, password)
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
@@ -22,8 +22,24 @@ class UserProfileManager(BaseUserManager):
 
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
+
+    MALE = 'male'
+    FEMALE = 'female'
+    OTHER = 'other'
+
+    CHOICES = [
+        (MALE, "male"),
+        (FEMALE, "female"),
+        (OTHER, "other")
+    ]
+
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255, unique=True)
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=True)
+    gender = models.CharField(max_length=255, blank=True, null=True, choices=CHOICES)
+    birth_day = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     groups = models.ManyToManyField(

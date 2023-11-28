@@ -3,9 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from .models import UserProfile
-from .serializers import UserProfileSerializer
+from .serializers import UserProfileSerializer, UserDetailSerializer
 from rest_framework import generics
 from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated
 
 
 # class RegisterUserView(APIView):
@@ -37,3 +38,24 @@ class RegisterUserView(generics.GenericAPIView, mixins.CreateModelMixin):
 
     def get_success_headers(self, data):
         return {'Location': str(data['id'])}
+
+
+class UserUpdateAPIView(generics.RetrieveUpdateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserDetailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+
+class UserProfileAPIView(generics.RetrieveAPIView):
+    serializer_class = UserDetailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
