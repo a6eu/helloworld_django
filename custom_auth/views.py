@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from .models import UserProfile
-from .serializers import UserProfileSerializer, UserUpdateSerializer
+from .serializers import UserProfileSerializer, UserDetailSerializer
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
@@ -40,26 +40,22 @@ class RegisterUserView(generics.GenericAPIView, mixins.CreateModelMixin):
         return {'Location': str(data['id'])}
 
 
-# class UserUpdateAPIView(APIView):
-#     serializer_class = UserUpdateSerializer
-#     permission_classes = [IsAuthenticated]
-#
-#     def put(self, request, pk):
-#         user = UserProfile.objects.get(pk=pk)
-#         serializer = UserUpdateSerializer(user, data=request.data)
-#
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-
-
-class UserUpdateAPIViews(generics.RetrieveUpdateAPIView):
+class UserUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = UserProfile.objects.all()
-    serializer_class = UserUpdateSerializer
+    serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
         return self.request.user
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+
+class UserProfileAPIView(generics.RetrieveAPIView):
+    serializer_class = UserDetailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+

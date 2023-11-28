@@ -23,14 +23,14 @@ class UserProfileManager(BaseUserManager):
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
 
-    MALE = 'MALE'
-    FEMALE = 'FEMALE'
-    OTHER = 'OTHER'
+    MALE = 'male'
+    FEMALE = 'female'
+    OTHER = 'other'
 
     CHOICES = [
-        (MALE, "Male"),
-        (FEMALE, "Female"),
-        (OTHER, "Other")
+        (MALE, "male"),
+        (FEMALE, "female"),
+        (OTHER, "other")
     ]
 
     first_name = models.CharField(max_length=255)
