@@ -1,5 +1,6 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
+from custom_auth.models import UserProfile
 
 
 class Question(models.Model):
@@ -14,19 +15,6 @@ class Role(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class User(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255, unique=True)
-    email = models.EmailField(unique=True)
-    gender = models.CharField(max_length=255, blank=True, null=True)
-    birth_day = models.DateField(blank=True, null=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
 
 
 class Category(MPTTModel):
@@ -65,7 +53,7 @@ class OrderedProducts(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     status = models.ForeignKey('PaymentStatus', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField()
@@ -80,7 +68,7 @@ class PaymentStatus(models.Model):
 
 
 class Basket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
@@ -101,7 +89,7 @@ class Brand(models.Model):
 
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     content = models.TextField()
     rating = models.IntegerField()
     created_by = models.DateTimeField()
@@ -109,11 +97,11 @@ class Comment(models.Model):
 
 class Favorites(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
 
 class Reply(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     content = models.TextField()
     created_by = models.DateTimeField()

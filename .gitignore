@@ -1,3 +1,12 @@
+# Ignore SQLite database
+*.sqlite3
+
+# Ignore migrations
+**/migrations/
+
+# Ignore local settings
+**/local_settings.py
+
 ../.idea
 .idea/
 mukash.txt

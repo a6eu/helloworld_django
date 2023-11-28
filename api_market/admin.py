@@ -12,7 +12,6 @@ admin.site.register(Category, CustomMPTTModelAdmin)
 admin.site.register(Product),
 admin.site.register(Brand),
 admin.site.register(Role),
-admin.site.register(User),
 admin.site.register(OrderedProducts),
 admin.site.register(Order),
 admin.site.register(PaymentStatus),
