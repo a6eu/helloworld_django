@@ -19,7 +19,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('id', 'first_name', 'last_name', 'phone_number', 'email', 'gender', 'birth_day', 'password')
+        fields = ('first_name', 'last_name', 'phone_number', 'email', 'gender', 'birth_day', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def update(self, instance, validated_data):

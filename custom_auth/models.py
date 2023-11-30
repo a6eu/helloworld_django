@@ -8,7 +8,7 @@ class UserProfileManager(BaseUserManager):
         if not email:
             raise ValueError('Users must have an email')
         email = self.normalize_email(email)
-        user = self.model(first_name=first_name, last_name=last_name, phone_number=phone_number, email=email, username=email)
+        user = self.model(first_name=first_name, last_name=last_name, phone_number=phone_number, email=email)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -58,8 +58,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     )
     objects = UserProfileManager()
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['phone_number']
 
     def __str__(self):
         return self.email
