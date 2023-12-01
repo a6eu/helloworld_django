@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from rest_framework import serializers
 from .models import *
 
@@ -47,6 +49,7 @@ class ProductUpdateSerializer(serializers.ModelSerializer):
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     brand = BrandSerializer(read_only=True)
+
     class Meta:
         model = Product
         fields = '__all__'
@@ -58,6 +61,18 @@ class ProductLisSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CommentListCreateSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
+    class Meta:
+        model = Comment
+        fields = ['content', 'rating', 'created_at', 'updated_at', 'user', "product",]
+        read_only_fields = ['updated_at', 'user', "product",]
 
+    def create(self, validated_data):
+        validated_data['updated_at'] = validated_data.get("created_at")
+        product_id = self.context['view'].kwargs.get('product_id')
+        product_db = Product.objects.get(pk=product_id)
+        validated_data['product'] = product_db
+        return super().create(validated_data)
 

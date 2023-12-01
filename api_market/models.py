@@ -92,7 +92,8 @@ class Comment(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     content = models.TextField()
     rating = models.IntegerField()
-    created_by = models.DateTimeField()
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
 
 
 class Favorites(models.Model):
