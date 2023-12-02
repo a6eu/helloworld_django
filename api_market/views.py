@@ -56,10 +56,21 @@ class ProductListCreateVeiew(ListModelMixin, CreateModelMixin, GenericAPIView):
 
 class CommentListCreateView(ListModelMixin, CreateModelMixin, GenericAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentListCreateSerializer
+    serializer_class = None
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CommentCreateSerializer
+        return CommentListSerializer
 
     def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        product_id = kwargs.get("product_id")
+        product = get_object_or_404(Product, pk=product_id)
+        comments_db = Comment.objects.filter(product=product)
+        serializer = self.get_serializer(comments_db, many=True)
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
+        product_id = kwargs.get("product_id")
+        product = get_object_or_404(Product, pk=product_id)
         return self.create(request, *args, **kwargs)

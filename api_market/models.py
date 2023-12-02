@@ -2,6 +2,8 @@ from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from custom_auth.models import UserProfile
 
+from django.utils import timezone
+
 
 class Question(models.Model):
     question_text = models.CharField(max_length=255)
@@ -91,9 +93,9 @@ class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     content = models.TextField()
-    rating = models.IntegerField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    rating = models.DecimalField(max_digits=10, decimal_places=5)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
 
 
 class Favorites(models.Model):
