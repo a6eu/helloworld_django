@@ -28,9 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'custom_auth.UserProfile'
-AUTHENTICATION_BACKENDS = [
-    'custom_auth.authentication.EmailPhoneUsernameAuthenticationBackend',
-]
+
 
 # Application definition
 
@@ -55,6 +53,11 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+# AUTHENTICATION_BACKENDS = [
+#     'custom_auth.authentication.EmailPhoneUsernameAuthenticationBackend',
+#     'rest_framework_simplejwt.authentication.JWTAuthentication',
+# ]
 
 SIMPLE_JWT = {
 
