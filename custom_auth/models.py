@@ -13,7 +13,7 @@ class UserProfileManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, first_name, last_name, phone_number, email, password=None):
+    def create_superuser(self, first_name, last_name, phone_number, email, password):
         user = self.create_user(first_name, last_name, phone_number, email, password)
         user.is_superuser = True
         user.is_staff = True
@@ -37,7 +37,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255, unique=True)
     email = models.EmailField(max_length=255, unique=True)
-    username = models.CharField(max_length=255, unique=True)
+    username = models.CharField(max_length=255, unique=False)
     gender = models.CharField(max_length=255, blank=True, null=True, choices=CHOICES)
     birth_day = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
