@@ -62,7 +62,7 @@ class ProductLisSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommentCreateSerializer(serializers.ModelSerializer):
+class CommentWriteSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
@@ -77,6 +77,19 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class CommentUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['content', 'updated_at', 'user', "product"]
+        read_only_fields = ['updated_at', 'user', "product", ]
+
+    def update(self, instance, validated_data):
+        instance.content = validated_data.get('content', instance.content)
+        instance.updated_at = validated_data.get('updated_at', timezone.now())
+        instance.save()
+        return instance
+
+
 class CommentListSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     last_name = serializers.CharField(source='user.last_name', read_only=True)
@@ -84,7 +97,7 @@ class CommentListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'first_name', 'last_name', 'created_by', "rating", "content", "created_at" ]
+        fields = ['id', 'first_name', 'last_name', 'created_by', "rating", "content", "created_at", "updated_at"]
         read_only_fields = ['user']
 
 

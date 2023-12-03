@@ -1,10 +1,13 @@
 from django.shortcuts import render, HttpResponse
+
+from django_filters.rest_framework import DjangoFilterBackend
+from .filter import ProductFilter
+
 from rest_framework.generics import *
 from rest_framework.mixins import *
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter
-from .filter import ProductFilter
-from rest_framework import generics
+
 from .models import *
 from .serializers import *
 
@@ -40,7 +43,7 @@ class ProductDetailView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin,
         return self.destroy(request, *args, **kwargs)
 
 
-class ProductListCreateVeiew(ListModelMixin, CreateModelMixin, GenericAPIView):
+class ProductListCreateView(ListModelMixin, CreateModelMixin, GenericAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSearchCreateSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
@@ -60,7 +63,7 @@ class CommentListCreateView(ListModelMixin, CreateModelMixin, GenericAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return CommentCreateSerializer
+            return CommentWriteSerializer
         return CommentListSerializer
 
     def get(self, request, *args, **kwargs):
@@ -74,3 +77,35 @@ class CommentListCreateView(ListModelMixin, CreateModelMixin, GenericAPIView):
         product_id = kwargs.get("product_id")
         product = get_object_or_404(Product, pk=product_id)
         return self.create(request, *args, **kwargs)
+
+
+class CommentDetailView(UpdateModelMixin, DestroyModelMixin, GenericAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, *args, **kwargs):
+        product_id = kwargs.get("product_id")
+        comment_id = kwargs.get("pk")
+        product_db = get_object_or_404(Product, pk=product_id)
+        comment_db = get_object_or_404(Comment, pk=comment_id)
+        if request.user != comment_db.user:
+            return Response({"detail": "You do not have permission to perform this action."},
+                            status=status.HTTP_403_FORBIDDEN)
+        if product_db != comment_db.product:
+            return Response({"detail": "In this product doesn't have this comment"},
+                            status=status.HTTP_404_NOT_FOUND)
+        return self.update(request, *args, **kwargs, partial=True)
+
+    def delete(self, request, *args, **kwargs):
+        product_id = kwargs.get("product_id")
+        comment_id = kwargs.get("pk")
+        product_db = get_object_or_404(Product, pk=product_id)
+        comment_db = get_object_or_404(Comment, pk=comment_id)
+        if request.user != comment_db.user:
+            return Response({"detail": "You do not have permission to perform this action."},
+                            status=status.HTTP_403_FORBIDDEN)
+        if product_db != comment_db.product:
+            return Response({"detail": "In this product doesn't have this comment"},
+                            status=status.HTTP_404_NOT_FOUND)
+        return self.destroy(request, *args, **kwargs)
