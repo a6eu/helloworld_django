@@ -5,6 +5,11 @@ from .models import UserProfile
 from django.contrib.auth.hashers import make_password
 
 
+class EmailPhoneLoginSerializer(serializers.Serializer):
+    email_or_phone = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile

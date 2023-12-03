@@ -4,6 +4,7 @@ from django.db.models import Q
 
 User = get_user_model()
 
+
 class EmailPhoneUsernameAuthenticationBackend(object):
     @staticmethod
     def authenticate(request, username=None, password=None):

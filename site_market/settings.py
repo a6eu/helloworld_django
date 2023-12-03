@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'mptt',
     'rest_framework',
     'rest_framework_simplejwt',
-
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -54,10 +53,9 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# AUTHENTICATION_BACKENDS = [
-#     'custom_auth.authentication.EmailPhoneUsernameAuthenticationBackend',
-#     'rest_framework_simplejwt.authentication.JWTAuthentication',
-# ]
+AUTHENTICATION_BACKENDS = [
+    'custom_auth.authentication.EmailPhoneUsernameAuthenticationBackend',
+]
 
 SIMPLE_JWT = {
 
