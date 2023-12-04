@@ -8,12 +8,18 @@ from django.utils import timezone
 class Question(models.Model):
     question_text = models.CharField(max_length=255)
 
-    def __str__(self):
+    def str(self):
         return f"question text : {self.question_text} "
 
 
-class Role(models.Model):
+class Tag(models.Model):
     name = models.CharField(max_length=255)
+
+
+class Brand(models.Model):
+    name = models.CharField(unique=True, max_length=255)
+    description = models.TextField()
+    logo_url = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
@@ -21,7 +27,8 @@ class Role(models.Model):
 
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    img_url = models.CharField(max_length=255)
+    parent = TreeForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name="children")
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -39,14 +46,19 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    rating_total = models.DecimalField(max_digits=5, decimal_places=2, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    brand = models.ForeignKey('Brand', on_delete=models.SET_NULL, null=True)
+    rating_total = models.DecimalField(max_digits=5, decimal_places=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     img_url = models.CharField(max_length=255)
     quantity = models.IntegerField()
 
     def __str__(self):
         return self.name
+
+
+class ProductTags(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
 
 class OrderedProducts(models.Model):
@@ -69,33 +81,24 @@ class PaymentStatus(models.Model):
         return self.status
 
 
-class Basket(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
-
-
 class ProductsInBasket(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     basket = models.ForeignKey('Basket', on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
 
-class Brand(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField()
-    logo_url = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     content = models.TextField()
-    rating = models.DecimalField(max_digits=10, decimal_places=5)
+    rating = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
+
+
+class Basket(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
 class Favorites(models.Model):
@@ -107,4 +110,5 @@ class Reply(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     content = models.TextField()
-    created_by = models.DateTimeField()
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)

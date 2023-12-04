@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.core.validators import RegexValidator
 
 
 class UserProfileManager(BaseUserManager):
@@ -21,6 +22,20 @@ class UserProfileManager(BaseUserManager):
         return user
 
 
+class Role(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class City(models.Model):
+    city = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.city
+
+
 class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     MALE = 'male'
@@ -33,13 +48,27 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         (OTHER, "other")
     ]
 
+    phone_number_regex = RegexValidator(
+        regex=r'\d{10}$', message="Numbers without +7/8"
+    )
+
+    password_validator = RegexValidator(
+        regex=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$',
+        message="Password must be 8 to 20 characters long, start with a letter, and contain at least one digit."
+    )
+
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255, unique=True)
+    phone_number = models.CharField(validators=[phone_number_regex], unique=True, max_length=10)
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=False)
     gender = models.CharField(max_length=255, blank=True, null=True, choices=CHOICES)
     birth_day = models.DateField(blank=True, null=True)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True)
+    address = models.CharField(max_length=255, null=True)
+    avatar = models.CharField(max_length=255, null=True, blank=True)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
+    password = models.CharField(validators=[password_validator], max_length=30)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     groups = models.ManyToManyField(

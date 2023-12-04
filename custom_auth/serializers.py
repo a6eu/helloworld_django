@@ -24,7 +24,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('first_name', 'last_name', 'phone_number', 'email', 'gender', 'birth_day', 'password')
+        fields = ('first_name', 'last_name', 'phone_number', 'email', 'gender', 'birth_day', 'city', 'address', 'avatar', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def update(self, instance, validated_data):
@@ -34,6 +34,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.gender = validated_data.get('gender', instance.gender)
         instance.birth_day = validated_data.get('birth_day', instance.birth_day)
+        instance.city = validated_data.get('city', instance.city)
+        instance.address = validated_data.get('address', instance.address)
+        instance.avatar = validated_data.get('avatar', instance.avatar)
 
         password = validated_data.get('password', None)
         if password is not None:
