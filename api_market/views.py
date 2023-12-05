@@ -92,7 +92,6 @@ class CommentDetailView(UpdateModelMixin, DestroyModelMixin, GenericAPIView):
 
     def delete(self, request, *args, **kwargs):
         self.validate_permission()
-
         return self.destroy(request, *args, **kwargs)
 
     def get_comment_and_product(self):
@@ -107,11 +106,6 @@ class CommentDetailView(UpdateModelMixin, DestroyModelMixin, GenericAPIView):
 
         print("efsergrdthrth")
         if self.request.user != comment.user:
-            print(222222)
-            raise PermissionDenied({"detail": "You do not have permission to perform this action."},
-                           )
-
+            raise PermissionDenied({"detail": "You do not have permission to perform this action."},)
         if product != comment.product:
-            print(333333333)
-            raise NotFound({"detail": "This comment does not belong to the specified product."},
-                            )
+            raise NotFound({"detail": "This comment does not belong to the specified product."},)
