@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponse
 
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.exceptions import NotFound, PermissionDenied
+
 from .filter import ProductFilter
 
 from rest_framework.generics import *
@@ -85,27 +87,31 @@ class CommentDetailView(UpdateModelMixin, DestroyModelMixin, GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, *args, **kwargs):
-        product_id = kwargs.get("product_id")
-        comment_id = kwargs.get("pk")
-        product_db = get_object_or_404(Product, pk=product_id)
-        comment_db = get_object_or_404(Comment, pk=comment_id)
-        if request.user != comment_db.user:
-            return Response({"detail": "You do not have permission to perform this action."},
-                            status=status.HTTP_403_FORBIDDEN)
-        if product_db != comment_db.product:
-            return Response({"detail": "In this product doesn't have this comment"},
-                            status=status.HTTP_404_NOT_FOUND)
+        self.validate_permission()
         return self.update(request, *args, **kwargs, partial=True)
 
     def delete(self, request, *args, **kwargs):
-        product_id = kwargs.get("product_id")
-        comment_id = kwargs.get("pk")
-        product_db = get_object_or_404(Product, pk=product_id)
-        comment_db = get_object_or_404(Comment, pk=comment_id)
-        if request.user != comment_db.user:
-            return Response({"detail": "You do not have permission to perform this action."},
-                            status=status.HTTP_403_FORBIDDEN)
-        if product_db != comment_db.product:
-            return Response({"detail": "In this product doesn't have this comment"},
-                            status=status.HTTP_404_NOT_FOUND)
+        self.validate_permission()
+
         return self.destroy(request, *args, **kwargs)
+
+    def get_comment_and_product(self):
+        product_id = self.kwargs.get("product_id")
+        comment_id = self.kwargs.get("pk")
+        product = get_object_or_404(Product, pk=product_id)
+        comment = get_object_or_404(Comment, pk=comment_id)
+        return product, comment
+
+    def validate_permission(self):
+        product, comment = self.get_comment_and_product()
+
+        print("efsergrdthrth")
+        if self.request.user != comment.user:
+            print(222222)
+            raise PermissionDenied({"detail": "You do not have permission to perform this action."},
+                           )
+
+        if product != comment.product:
+            print(333333333)
+            raise NotFound({"detail": "This comment does not belong to the specified product."},
+                            )
