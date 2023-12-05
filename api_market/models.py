@@ -81,9 +81,15 @@ class PaymentStatus(models.Model):
         return self.status
 
 
+class Basket(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    product = models.ManyToManyField(Product, through='ProductsInBasket')
+
+
 class ProductsInBasket(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    basket = models.ForeignKey('Basket', on_delete=models.CASCADE)
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
 
@@ -94,11 +100,6 @@ class Comment(models.Model):
     rating = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
-
-
-class Basket(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
 class Favorites(models.Model):
