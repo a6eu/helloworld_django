@@ -1,7 +1,7 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from custom_auth.models import UserProfile
-
+from django.core import validators
 from django.utils import timezone
 
 
@@ -89,8 +89,8 @@ class Basket(models.Model):
 
 class ProductsInBasket(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='products')
+    quantity = models.IntegerField(validators=[validators.MinValueValidator(1)])
 
 
 class Comment(models.Model):

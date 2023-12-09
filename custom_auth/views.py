@@ -73,10 +73,12 @@ class UserUpdateAPIView(generics.RetrieveUpdateAPIView):
         serializer.save()
 
 
-class UserProfileAPIView(generics.RetrieveAPIView):
-    serializer_class = UserDetailSerializer
-    permission_classes = [IsAuthenticated]
+# class UserProfileAPIView(generics.RetrieveAPIView):
+#     serializer_class = UserDetailSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     def get_object(self):
+#         return self.request.user
 
-    def get_object(self):
-        return self.request.user
+
 
