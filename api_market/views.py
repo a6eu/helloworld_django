@@ -120,10 +120,6 @@ class BasketView(mixins.CreateModelMixin, GenericAPIView, mixins.RetrieveModelMi
     def delete(self, request, *args, **kwargs):
         basket = Basket.objects.get(user=self.request.user)
         products_in_basket = ProductsInBasket.objects.filter(basket_id=basket.id)
-        for product_in_basket in products_in_basket:
-            product = product_in_basket.product
-            product.quantity += product_in_basket.quantity
-            product.save()
         products_in_basket.delete()
         return Response({"message": "Basket cleared successfully"}, status=status.HTTP_200_OK)
 
@@ -164,9 +160,6 @@ class RemoveProductInBasketView(mixins.DestroyModelMixin, GenericAPIView):
     def delete(self, request, *args, **kwargs):
         basket = Basket.objects.get(user=self.request.user)
         product_in_basket = ProductsInBasket.objects.get(basket_id=basket.id, product_id=self.kwargs['pk'])
-        product = Product.objects.get(pk=self.kwargs['pk'])
-        product.quantity += product_in_basket.quantity
-        product.save()
         product_in_basket.delete()
 
         return Response({"message": "Product cleared successfully"}, status=status.HTTP_200_OK)
