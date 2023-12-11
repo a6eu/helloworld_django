@@ -25,11 +25,22 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ("id", "name", "children")
 
+    def get_image_url(self, instance):
+        if instance.image:
+            return instance.image.url
+        return None
+
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = '__all__'
+
+    def get_image_url(self, instance):
+        if instance.image:
+            return instance.image.url
+        return None
+
 
 
 class ProductSearchCreateSerializer(serializers.ModelSerializer):
@@ -54,6 +65,11 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+    def get_image_url(self, instance):
+        if instance.image:
+            return instance.image.url
+        return None
 
 
 class ProductLisSerializer(serializers.ModelSerializer):

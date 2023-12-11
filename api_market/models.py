@@ -19,7 +19,7 @@ class Tag(models.Model):
 class Brand(models.Model):
     name = models.CharField(unique=True, max_length=255)
     description = models.TextField()
-    logo_url = models.CharField(max_length=255)
+    logo_url = models.ImageField(upload_to="01it.group/brands/")
 
     def __str__(self):
         return self.name
@@ -27,7 +27,7 @@ class Brand(models.Model):
 
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
-    img_url = models.CharField(max_length=255)
+    img_url = models.ImageField(upload_to="01it.group/categories/")
     parent = TreeForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name="children")
 
     class MPTTMeta:
@@ -49,7 +49,7 @@ class Product(models.Model):
     rating_total = models.DecimalField(max_digits=5, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
-    img_url = models.CharField(max_length=255)
+    img_url = models.ImageField(upload_to="01it.group/products/")
     quantity = models.IntegerField()
 
     def __str__(self):
