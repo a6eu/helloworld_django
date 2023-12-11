@@ -160,18 +160,13 @@ class AddProductsInBasketSerializer(serializers.ModelSerializer):
         product_id = self.validated_data['product_id']
         quantity = self.validated_data['quantity']
         basket_id = self.context['basket_id']
-        product = Product.objects.get(pk=product_id)
         try:
             basket_product = ProductsInBasket.objects.get(basket_id=basket_id, product_id=product_id)
             basket_product.quantity += quantity
             basket_product.save()
-            product.quantity -= quantity
-            product.save()
             self.instance = basket_product
         except ProductsInBasket.DoesNotExist:
             self.instance = ProductsInBasket.objects.create(basket_id=basket_id, **self.validated_data)
-            product.quantity -= quantity
-            product.save()
 
     class Meta:
         model = ProductsInBasket
