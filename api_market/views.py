@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter
 from .models import *
 from .serializers import *
+from rest_framework import generics
 
 
 class ListCategoryView(GenericAPIView, ListModelMixin):
@@ -156,6 +157,7 @@ class ProductInBasketView(mixins.CreateModelMixin, GenericAPIView, mixins.ListMo
 class RemoveProductInBasketView(mixins.DestroyModelMixin, GenericAPIView):
     queryset = ProductsInBasket.objects.all()
     serializer_class = ProductsInBasketSerializer
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):
         basket = Basket.objects.get(user=self.request.user)
@@ -164,4 +166,45 @@ class RemoveProductInBasketView(mixins.DestroyModelMixin, GenericAPIView):
 
         return Response({"message": "Product cleared successfully"}, status=status.HTTP_200_OK)
 
+
+class FavoritesListView(mixins.ListModelMixin, GenericAPIView):
+    serializer_class = FavoritesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Favorites.objects.filter(user=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class FavoritesAddDeleteView(mixins.CreateModelMixin, mixins.DestroyModelMixin, GenericAPIView):
+    queryset = Favorites.objects.all()
+    serializer_class = FavoritesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        product_id = self.kwargs['pk']
+        product = generics.get_object_or_404(Product, id=product_id)
+
+        if Favorites.objects.filter(user=user, product=product).exists():
+            raise serializers.ValidationError("Product is already in favorites.")
+
+        serializer.save(user=user, product=product)
+
+    def perform_destroy(self, instance):
+        user = self.request.user
+        product = instance.product
+
+        if not Favorites.objects.filter(user=user, product=product).exists():
+            raise serializers.ValidationError("Product is not in favorites.")
+
+        instance.delete()
 

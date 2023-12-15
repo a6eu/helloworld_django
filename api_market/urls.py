@@ -10,7 +10,8 @@ urlpatterns = [
     path("basket", views.BasketView.as_view()),
     path("basket/products", views.ProductInBasketView.as_view()),
     path("basket/products/<int:pk>", views.RemoveProductInBasketView.as_view()),
-
+    path("favorites/products", views.FavoritesListView.as_view()),
+    path("favorites/products/<int:pk>", views.FavoritesAddDeleteView.as_view())
 
 
 ]

@@ -173,3 +173,10 @@ class AddProductsInBasketSerializer(serializers.ModelSerializer):
         fields = ['id', 'product_id', 'quantity']
 
 
+class FavoritesSerializer(serializers.ModelSerializer):
+    product = ProductDetailSerializer(read_only=True)
+
+    class Meta:
+        model = Favorites
+        fields = ['product']
+

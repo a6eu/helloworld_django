@@ -49,3 +49,4 @@ class UserDetailSerializer(serializers.ModelSerializer):
         if instance.image:
             return instance.image.url
         return None
+
