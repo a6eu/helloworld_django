@@ -11,7 +11,6 @@ class CustomMPTTModelAdmin(MPTTModelAdmin):
 admin.site.register(Category, CustomMPTTModelAdmin)
 admin.site.register(Product),
 admin.site.register(Brand),
-admin.site.register(OrderedProducts),
 admin.site.register(Order),
 admin.site.register(PaymentStatus),
 admin.site.register(Basket),
@@ -19,6 +18,9 @@ admin.site.register(ProductsInBasket),
 admin.site.register(Comment),
 admin.site.register(Favorites),
 admin.site.register(Reply),
+
+
+
 
 
 

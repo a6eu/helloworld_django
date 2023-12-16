@@ -156,6 +156,7 @@ class ProductInBasketView(mixins.CreateModelMixin, GenericAPIView, mixins.ListMo
 class RemoveProductInBasketView(mixins.DestroyModelMixin, GenericAPIView):
     queryset = ProductsInBasket.objects.all()
     serializer_class = ProductsInBasketSerializer
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):
         basket = Basket.objects.get(user=self.request.user)
@@ -165,3 +166,25 @@ class RemoveProductInBasketView(mixins.DestroyModelMixin, GenericAPIView):
         return Response({"message": "Product cleared successfully"}, status=status.HTTP_200_OK)
 
 
+class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.method == 'POST':
+            queryset = Order.objects.all()
+            return queryset
+        elif self.request.method == 'GET':
+            user = self.request.user
+            queryset = Order.objects.filter(user=user)
+            return queryset
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return OrderWriteSerializers
+        return OrderListSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

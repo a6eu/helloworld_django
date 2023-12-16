@@ -3,6 +3,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from custom_auth.models import UserProfile
 from django.core import validators
 from django.utils import timezone
+from django.utils.functional import cached_property
 
 
 class Question(models.Model):
@@ -48,7 +49,7 @@ class Product(models.Model):
     description = models.TextField()
     rating_total = models.DecimalField(max_digits=5, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, related_name="brands", on_delete=models.CASCADE)
     img_url = models.CharField(max_length=255)
     quantity = models.IntegerField()
 
@@ -61,24 +62,39 @@ class ProductTags(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
 
-class OrderedProducts(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    order = models.ForeignKey('Order', on_delete=models.CASCADE)
-
-
-class Order(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    status = models.ForeignKey('PaymentStatus', on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-
-
 class PaymentStatus(models.Model):
     status = models.CharField(max_length=255)
 
     def __str__(self):
         return self.status
+
+
+class OrderedProducts(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey('Order',  related_name="order_items", on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
+
+    @cached_property
+    def cost(self):
+        return round(self.quantity * self.product.price, 2)
+
+
+class Order(models.Model):
+    user = models.ForeignKey(UserProfile, related_name="orders", on_delete=models.CASCADE)
+    status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE)
+    # cost = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
+    product = models.ManyToManyField(Product, through='OrderedProducts')
+
+    @cached_property
+    def total_cost(self):
+        """
+        Total cost of all the items in an order
+        """
+        return round(sum([order_item.cost for order_item in self.order_items.all()]), 2)
 
 
 class Basket(models.Model):
