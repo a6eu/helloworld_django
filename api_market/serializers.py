@@ -25,11 +25,22 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ("id", "name", "children")
 
+    def get_image_url(self, instance):
+        if instance.image:
+            return instance.image.url
+        return None
+
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = '__all__'
+
+    def get_image_url(self, instance):
+        if instance.image:
+            return instance.image.url
+        return None
+
 
 
 class ProductSearchCreateSerializer(serializers.ModelSerializer):
@@ -55,6 +66,11 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+    def get_image_url(self, instance):
+        if instance.image:
+            return instance.image.url
+        return None
+
 
 class ProductLisSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,15 +79,20 @@ class ProductLisSerializer(serializers.ModelSerializer):
 
 
 class ProductReadSerializer(serializers.ModelSerializer):
-    brand_logo_url = serializers.SerializerMethodField()
+    brand_logo_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'img_url', 'brand_logo_url', 'price']
 
     def get_brand_logo_url(self, instance):
-        return instance.brand.logo_url
+        if instance.brand:
+            return instance.brand.logo_url.url
 
+    # def get_image_url(self, instance):
+    #     if instance.image:
+    #         return instance.image.url
+    #     return None
 
 class CommentWriteSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -223,3 +244,12 @@ class OrderWriteSerializers(serializers.Serializer):
         for order_data in orders_data:
             OrderedProducts.objects.create(order=order, **order_data)
         return order
+
+
+class FavoritesSerializer(serializers.ModelSerializer):
+    product = ProductDetailSerializer(read_only=True)
+
+    class Meta:
+        model = Favorites
+        fields = ['product']
+

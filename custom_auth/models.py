@@ -23,17 +23,10 @@ class UserProfileManager(BaseUserManager):
 
 
 class Role(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, default="User")
 
     def __str__(self):
         return self.name
-
-
-class City(models.Model):
-    city = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.city
 
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
@@ -64,9 +57,9 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=False)
     gender = models.CharField(max_length=255, blank=True, null=True, choices=CHOICES)
     birth_day = models.DateField(blank=True, null=True)
-    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True)
+    city = models.CharField(max_length=20, null=True)
     address = models.CharField(max_length=255, null=True)
-    avatar = models.CharField(max_length=255, null=True, blank=True)
+    avatar = models.ImageField(upload_to="01it.group/users/", null=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
     password = models.CharField(validators=[password_validator], max_length=100)
     is_active = models.BooleanField(default=True)

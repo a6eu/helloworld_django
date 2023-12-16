@@ -11,5 +11,8 @@ urlpatterns = [
     path("basket/products/", views.ProductInBasketView.as_view()),
     path("basket/products/<int:pk>", views.RemoveProductInBasketView.as_view()),
     path("order/", views.OrderView.as_view(), name='view_order'),
+    path("favorites/products", views.FavoritesListView.as_view()),
+    path("favorites/products/<int:pk>", views.FavoritesAddDeleteView.as_view())
+
 
 ]

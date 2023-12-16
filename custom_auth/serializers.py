@@ -44,3 +44,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+    def get_image_url(self, instance):
+        if instance.image:
+            return instance.image.url
+        return None
+
