@@ -35,6 +35,13 @@ AUTH_USER_MODEL = 'custom_auth.UserProfile'
 INSTALLED_APPS = [
     'django_filters',
     'api_market.apps.ApiMarketConfig',
+    'basket.apps.BasketConfig',
+    'favorites.apps.FavoritesConfig',
+    'order.apps.OrderConfig',
+    'products.apps.ProductsConfig',
+    'comment.apps.CommentConfig',
+    'brand.apps.BrandConfig',
+    'category.apps.CategoryConfig',
     'custom_auth.apps.AuthConfig',
     'django.contrib.admin',
     'django.contrib.auth',

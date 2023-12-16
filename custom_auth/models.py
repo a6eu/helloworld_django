@@ -59,7 +59,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     birth_day = models.DateField(blank=True, null=True)
     city = models.CharField(max_length=20, null=True)
     address = models.CharField(max_length=255, null=True)
-    avatar = models.ImageField(upload_to="01it.group/users/", null=True)
+    avatar = models.ImageField(upload_to="01it.group/users/", null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
     password = models.CharField(validators=[password_validator], max_length=100)
     is_active = models.BooleanField(default=True)

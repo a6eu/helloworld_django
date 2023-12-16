@@ -8,14 +8,6 @@ from rest_framework.filters import SearchFilter
 from .models import *
 from .serializers import *
 from rest_framework import generics
+from django.shortcuts import render
 
-
-def index(request):
-    return HttpResponse("Salem Alem")
-
-
-
-
-
-
-
+# Create your views here.
