@@ -1,13 +1,9 @@
-from django.shortcuts import render, HttpResponse
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.filters import SearchFilter
-from .models import *
 from .serializers import *
-from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
 
@@ -15,6 +11,7 @@ from rest_framework import generics
 class CommentListCreateView(ListModelMixin, CreateModelMixin, GenericAPIView):
     queryset = Comment.objects.all()
     serializer_class = None
+    pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
         if self.request.method == 'POST':

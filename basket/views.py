@@ -1,13 +1,8 @@
-from django.shortcuts import render, HttpResponse
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.filters import SearchFilter
-from .models import *
 from .serializers import *
-from rest_framework import generics
 
 # Create your views here.
 
@@ -16,6 +11,7 @@ class BasketView(mixins.CreateModelMixin, GenericAPIView, mixins.RetrieveModelMi
     queryset = Basket.objects.all()
     serializer_class = BasketSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
 
     def get(self, request, *args, **kwargs):
         basket = Basket.objects.get(user=request.user)
@@ -32,6 +28,7 @@ class BasketView(mixins.CreateModelMixin, GenericAPIView, mixins.RetrieveModelMi
 class ProductInBasketView(mixins.CreateModelMixin, GenericAPIView, mixins.ListModelMixin,
                           mixins.DestroyModelMixin):
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
