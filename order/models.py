@@ -27,9 +27,16 @@ class OrderedProducts(models.Model):
 
 
 class Order(models.Model):
+    PENDING = "P"
+    COMPLETED = "C"
+
+    STATUS_CHOICES = [
+        (PENDING, "pending"),
+        (COMPLETED, "completed"),
+    ]
     user = models.ForeignKey(UserProfile, related_name="orders", on_delete=models.CASCADE)
-    status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE)
-    # cost = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE)
+    order_status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PENDING)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     product = models.ManyToManyField(Product, through='OrderedProducts')
