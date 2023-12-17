@@ -53,8 +53,6 @@ class CommentDetailView(UpdateModelMixin, DestroyModelMixin, GenericAPIView):
 
     def validate_permission(self):
         product, comment = self.get_comment_and_product()
-
-        print("efsergrdthrth")
         if self.request.user != comment.user:
             raise PermissionDenied({"detail": "You do not have permission to perform this action."},)
         if product != comment.product:

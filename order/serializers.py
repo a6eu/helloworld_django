@@ -1,4 +1,6 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
+
 from .models import *
 from products.serializers import ProductReadSerializer
 
@@ -86,3 +88,21 @@ class OrderWriteSerializers(serializers.Serializer):
 
         return order
 
+
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['order_status', 'id']
+
+    def get_id(self, obj):
+        request = self.context.get('request')
+        if request:
+            return request.parser_context['kwargs'].get('pk')
+        return None
+
+    def update(self, instance, validated_data):
+        instance.order_status = validated_data.pop('order_status')
+        instance.save()
+        return Response(status=status.HTTP_200_OK)

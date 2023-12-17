@@ -7,7 +7,7 @@ from .serializers import *
 # Create your views here.
 
 
-class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, GenericAPIView):
+class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, GenericAPIView):
     permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
 
@@ -31,3 +31,14 @@ class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class OrderDetailView(mixins.UpdateModelMixin, GenericAPIView):
+    serializer_class = OrderUpdateSerializer
+    queryset = Order
+    permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs, partial=True)
+
