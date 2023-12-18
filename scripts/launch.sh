@@ -1,15 +1,6 @@
-#!/usr/bin/env bash
+export DJANGO_SETTINGS_MODULE=bilim_ai.settings
+python manage.py collectstatic --noinput
+echo 'Applying migrations...'
+python manage.py migrate
 
-# Set defaults if not provided in environment
-: "${MODULE_NAME:=app.main}"
-: "${VARIABLE_NAME:=app}"
-: "${APP_MODULE:=$MODULE_NAME:$VARIABLE_NAME}"
-: "${HOST:=0.0.0.0}"
-: "${PORT:=8000}"
-
-# Start uvicorn with live-reload
-uvicorn \
-    --proxy-headers \
-    --host "$HOST" \
-    --port "$PORT" \
-    "$APP_MODULE"
+gunicorn bilim_ai.wsgi:application --bind 0.0.0.0:$PORT
