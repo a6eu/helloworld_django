@@ -1,4 +1,7 @@
 export DJANGO_SETTINGS_MODULE=site_market.settings
+
+source "$(poetry env info --path)/bin/activate"
+
 python manage.py collectstatic --noinput
 echo 'Applying migrations...'
 python manage.py migrate
