@@ -2,7 +2,7 @@
 *.sqlite3
 
 # Ignore migrations
-#**/migrations/
+**/migrations/
 
 # Ignore local settings
 **/local_settings.py
