@@ -7,7 +7,4 @@ COPY . .
 
 RUN poetry install
 
-CMD ["poetry", "python", "manage.py", "migrate"]
-CMD ["poetry", "python", "manage.py", "makemigrations"]
-
-CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:9000"]
+ENTRYPOINT ["sh", "./scripts/launch.sh"]
