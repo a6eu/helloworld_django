@@ -12,7 +12,6 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, related_name="brands", on_delete=models.CASCADE, null=True)
     img_url = models.ImageField(upload_to="01it.group/products/", null=True)
-
     quantity = models.IntegerField()
 
     def __str__(self):

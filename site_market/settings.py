@@ -126,11 +126,11 @@ WSGI_APPLICATION = 'site_market.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '01it_group_db',
+        'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
+        'PASSWORD': '23E2*1ECdeGGDcDcgDEB5B*b3563G4-e',
+        'HOST': 'roundhouse.proxy.rlwy.net',
+        'PORT': '11686',
     }
 }
 
