@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'mptt',
     'rest_framework',
     'rest_framework_simplejwt',
+    'corsheaders',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -95,6 +96,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'site_market.urls'
@@ -191,4 +193,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 CSRF_TRUSTED_ORIGINS = [
     'https://market.up.railway.app'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
 ]
