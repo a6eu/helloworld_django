@@ -9,13 +9,13 @@ from .models import *
 from .serializers import *
 from rest_framework import generics
 
-
-def index(request):
-    return HttpResponse("Salem Alem")
+# Create your views here.
 
 
+class ListCategoryView(GenericAPIView, ListModelMixin):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
-
-
-
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 

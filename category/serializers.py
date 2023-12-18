@@ -1,8 +1,5 @@
-from django.utils import timezone
-
 from rest_framework import serializers
-from rest_framework.response import *
-from .models import *
+from category.models import Category
 
 
 class FilterReviewSerializer(serializers.ListSerializer):
@@ -25,25 +22,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ("id", "name", "children")
 
-
-class BrandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Brand
-        fields = '__all__'
-
-
-class ProductDetailSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(slug_field='name', read_only=True)
-    brand = BrandSerializer(read_only=True)
-
-    class Meta:
-        model = Product
-        fields = '__all__'
-
-
-
-
-
-
-
-
+    def get_image_url(self, instance):
+        if instance.image:
+            return instance.image.url
+        return None

@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class ApiMarketConfig(AppConfig):
+class BasketConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'api_market'
+    name = 'basket'
 
     def ready(self):
-        import api_market.signals
+        import basket.signals
