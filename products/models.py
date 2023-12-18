@@ -11,7 +11,6 @@ class Product(models.Model):
     rating_total = models.DecimalField(max_digits=5, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     img_url = models.ImageField(upload_to="01it.group/products/", null=True)
-
     quantity = models.IntegerField()
 
     def __str__(self):
