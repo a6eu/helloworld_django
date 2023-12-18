@@ -5,6 +5,15 @@
         "watchPatterns": [
             "/app/*.py",
             "/app/**/*.py",
+            "/site_market/*.py",
+            "/basket/*.py",
+            "/brand/*.py",
+            "/category/*.py",
+            "/comment/*.py",
+            "/custom_auth/*.py",
+            "/favorites/*.py",
+            "/order/*.py",
+            "/products/*.py",
             "/Dockerfile",
             "/pyproject.toml"
         ]
