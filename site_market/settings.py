@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import timedelta
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -67,7 +67,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SIMPLE_JWT = {
-
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
