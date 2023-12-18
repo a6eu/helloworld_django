@@ -12,3 +12,9 @@ class BrandSerializer(serializers.ModelSerializer):
             return instance.image.url
         return None
 
+
+class BrandIdNameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Brand
+        fields = ("id", "name")

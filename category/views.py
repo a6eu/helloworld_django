@@ -15,6 +15,7 @@ from rest_framework import generics
 class ListCategoryView(GenericAPIView, ListModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    pagination_class = None
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
