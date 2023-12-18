@@ -7,4 +7,4 @@ COPY . .
 
 RUN poetry install
 
-ENTRYPOINT ["sh", "./scripts/launch.sh"]
+ENTRYPOINT ["sh", "launch.sh"]
