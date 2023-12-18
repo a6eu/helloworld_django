@@ -26,3 +26,9 @@ class CategorySerializer(serializers.ModelSerializer):
         if instance.image:
             return instance.image.url
         return None
+
+
+class CategoryNameIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ("id", "name",)
