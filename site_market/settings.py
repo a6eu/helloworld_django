@@ -129,7 +129,7 @@ DATABASES = {
         'NAME': '01it_group_db',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

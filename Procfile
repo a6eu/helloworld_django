@@ -1,0 +1,1 @@
+web: gunicorn site_market.wsgi --log-file -
