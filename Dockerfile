@@ -9,7 +9,7 @@ RUN poetry install
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-RUN chmod +x ./scripts/launch.sh
+
 EXPOSE $PORT
 
 ENTRYPOINT ["sh", "launch.sh"]
