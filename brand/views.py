@@ -26,6 +26,7 @@ class BrandListView(mixins.ListModelMixin, GenericAPIView):
 class BrandDetailView(mixins.RetrieveModelMixin, GenericAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+    lookup_field = 'name'
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
