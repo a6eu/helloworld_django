@@ -13,7 +13,6 @@ class ProductFilter(django_filters.FilterSet):
         }
 
     def filter_category_name_and_parent_name(self, queryset, name, value):
-        # Custom method to filter based on both category__name and category__parent__name
         return queryset.filter(
             Q(category__name__iexact=value) | Q(category__parent__name__iexact=value)
         )
