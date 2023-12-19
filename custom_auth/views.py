@@ -54,7 +54,7 @@ class RegisterUserView(generics.GenericAPIView, mixins.CreateModelMixin):
                 {'error': 'Указанный адрес электронной почты уже зарегистрирован!'},
                      status=status.HTTP_400_BAD_REQUEST)
         elif UserProfile.objects.filter(phone_number=request.data.get('phone_number')).exists():
-            return Response({'error': 'Телефонный номер уже зарегистрирован!'},
+            return Response({'error': 'Этот номер телефона уже зарегестрирован!'},
                      status=status.HTTP_400_BAD_REQUEST)
         else:
             return self.create(request, *args, **kwargs)
