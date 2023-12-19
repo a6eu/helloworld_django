@@ -29,4 +29,9 @@ class BrandDetailView(mixins.RetrieveModelMixin, GenericAPIView):
     lookup_field = 'name'
 
     def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+        filter_kwargs = {'name__iexact': kwargs['name']}
+        brand = get_object_or_404(Brand, **filter_kwargs)
+        serializer = self.get_serializer(brand)
+        return Response(serializer.data)
+
+
