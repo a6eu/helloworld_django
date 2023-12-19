@@ -7,7 +7,7 @@ class UserProfileManager(BaseUserManager):
 
     def create_user(self, first_name, last_name, phone_number, email, password=None):
         if not email:
-            raise ValueError('Users must have an email or phone number')
+            raise ValueError('Пользователи должны иметь адрес электронной почты или номер телефона')
         email = self.normalize_email(email)
         user = self.model(first_name=first_name, last_name=last_name, phone_number=phone_number, email=email)
         user.set_password(password)
@@ -47,7 +47,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     password_validator = RegexValidator(
         regex=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$',
-        message="Password must be 8 to 20 characters long, start with a letter, and contain at least one digit."
+        message="Пароль должен быть длиной от 8 до 20 символов, начинаться с буквы и содержать как минимум одну цифру."
     )
 
     first_name = models.CharField(max_length=255)
