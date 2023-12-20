@@ -9,3 +9,5 @@ class ProductFilter(django_filters.FilterSet):
             'brand__name': ['iexact'],
             'category__name': ['iexact'],
         }
+
+
