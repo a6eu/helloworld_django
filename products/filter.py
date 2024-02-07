@@ -16,3 +16,5 @@ class ProductFilter(django_filters.FilterSet):
         return queryset.filter(
             Q(category__name__iexact=value) | Q(category__parent__name__iexact=value)
         )
+
+
