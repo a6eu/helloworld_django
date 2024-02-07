@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -130,9 +131,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': '23E2*1ECdeGGDcDcgDEB5B*b3563G4-e',
-        'HOST': 'roundhouse.proxy.rlwy.net',
-        'PORT': '11686',
+        'PASSWORD': '16gDgfFF4bf3f-63d2DgdGG15-e6B*43',
+        'HOST': 'monorail.proxy.rlwy.net',
+        'PORT': '58877',
     }
 }
 
@@ -170,8 +171,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -198,3 +200,18 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+# REDIS_HOST = '0.0.0.0'
+# REDIS_PORT = '6379'
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+
+# CELERY_BEAT_SCHEDULE = {
+#     'update-database-every-5-minutes': {
+#         'task': 'category.tasks.update_database_task',
+#         'schedule': timedelta(minutes=5),
+#     },
+# }
