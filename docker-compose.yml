@@ -23,10 +23,10 @@ services:
     networks:
       - manage_project
     ports:
-      - '8000:9000'
+      - '8000:8000'
     volumes:
       - .:/code
-    command: sh launch.sh
+#    command: sh launch.sh
 
 networks:
   manage_project:
