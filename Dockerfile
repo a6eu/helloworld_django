@@ -14,5 +14,5 @@ RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 COPY . .
 
 
-
-CMD ["sh", "launch.sh"]
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8000", "site_market.wsgi:application "]
+#CMD ["sh", "launch.sh"]
