@@ -12,8 +12,8 @@ class ProductsInBasketSerializer(serializers.ModelSerializer):
         model = ProductsInBasket
         fields = ["id", 'product', "quantity", "total_price"]
 
-    def get_total_price(self, product_item: ProductsInBasket):
-        return product_item.quantity*product_item.product.price
+    def get_total_price(product_item: ProductsInBasket):
+        return product_item.quantity * product_item.product.price
 
 
 class BasketSerializer(serializers.ModelSerializer):

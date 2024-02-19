@@ -20,10 +20,11 @@ class OrderedProducts(models.Model):
     quantity = models.IntegerField(null=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
+    price = models.DecimalField(null=True, decimal_places=2, max_digits=10)
 
     @cached_property
     def cost(self):
-        return round(self.quantity * self.product.price, 2)
+        return round(self.quantity * self.price, 2)
 
 
 class Order(models.Model):
