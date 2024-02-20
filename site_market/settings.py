@@ -199,6 +199,9 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://93.190.242.142:9443",
+    
+    
 ]
 
 # REDIS_HOST = '0.0.0.0'
