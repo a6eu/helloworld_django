@@ -41,7 +41,7 @@ class UserLoginView(generics.GenericAPIView):
                 'refresh': str(refresh),
                 'access': access_token
             }, status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'error': 'Неправильный логин или пароль'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class RegisterUserView(generics.GenericAPIView, mixins.CreateModelMixin):
