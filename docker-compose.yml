@@ -14,18 +14,7 @@ services:
       - manage_project
     ports:
       - '5432:5432'
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-    networks:
-      - manage_project
-    ports:
-      - '8000:8000'
-    volumes:
-      - .:/code
+ 
 
 
 networks:
