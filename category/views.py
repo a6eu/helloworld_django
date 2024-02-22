@@ -13,9 +13,10 @@ from rest_framework import generics
 
 
 class ListCategoryView(GenericAPIView, ListModelMixin):
-    queryset = Category.objects.all()
+    queryset = Category.objects.select_related('parent').all()
     serializer_class = CategorySerializer
     pagination_class = None
+
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
