@@ -14,7 +14,7 @@ class BasketView(mixins.CreateModelMixin, GenericAPIView, mixins.RetrieveModelMi
     pagination_class = PageNumberPagination
 
     def get(self, request, *args, **kwargs):
-        basket = Basket.objects.get(user=request.user)
+        basket = get_object_or_404(Basket, user=request.user)
         serializer = BasketSerializer(basket)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
