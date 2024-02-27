@@ -8,7 +8,7 @@ from products.models import Product
 
 
 class Basket(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     product = models.ManyToManyField(Product, through='ProductsInBasket')
 

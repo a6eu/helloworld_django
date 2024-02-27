@@ -8,7 +8,7 @@ from .serializers import *
 
 
 class BasketView(mixins.CreateModelMixin, GenericAPIView, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
-    queryset = Basket.objects.prefetch_related('products__product').all()
+    queryset = Basket.objects.select_related('user').prefetch_related('products__product').all()
     serializer_class = BasketSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
