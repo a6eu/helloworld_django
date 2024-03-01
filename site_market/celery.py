@@ -10,8 +10,12 @@ app.conf.broker_url = settings.CELERY_BROKER_URL
 app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
-    'get_categories_every_1_minutes': {
-        'task': 'category.tasks.test_task',
-        'schedule': crontab(minute='*/1')
+    # 'get_categories_every_5_minutes': {
+    #     'task': 'category.tasks.update_categories',
+    #     'schedule': crontab(minute='*/5')
+    # },
+    'get_products_every_5_minutes': {
+        'task': 'products.tasks.update_products',
+        'schedule': crontab(minute='*/20'),
     },
 }

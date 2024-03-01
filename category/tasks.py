@@ -4,11 +4,40 @@ from .models import Category
 from site_market.celery import app
 
 
-@app.task
-def test_task():
-    print('Worked')
-    return True
+# @app.task
+# def test_task():
+#     print('Worked')
+#     return True
 
+@app.task()
+def update_categories():
+    url = "https://b2b.marvel.kz/Api/GetCatalogCategories"
+    data = {
+        "user": "01itgroup04",
+        "password": "m_u_oOV8N1",
+        "secretKey": "",
+        "responseFormat": 1
+    }
+    response = requests.post(url, data=data)
+    if response.status_code == 200:
+        categories_data = response.json().get('Body', {}).get('Categories', [])
+        for category_data in categories_data:
+            if category_data['CategoryName'] in ["Персональные компьютеры", "Ноутбуки и планшеты",
+                                                 "Мониторы и профессиональные панели"]:
+                save_category(category_data)
+
+
+def save_category(category_data, parent=None):
+    category, created = Category.objects.get_or_create(
+        categoryId=category_data['CategoryID'],
+        defaults={
+            'name': category_data['CategoryName'],
+            'parent': parent
+        }
+    )
+
+    for subcategory_data in category_data.get('SubCategories', []):
+        save_category(subcategory_data, parent=category)
 
 # @app.task()
 # def update_database():
