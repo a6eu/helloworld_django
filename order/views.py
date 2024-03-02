@@ -5,10 +5,24 @@ from .serializers import *
 
 
 # Create your views here.
+class OrderListView(mixins.ListModelMixin, GenericAPIView):
+    pagination_class = PageNumberPagination
+    # permission_classes = [IsAuthenticated]
+
+    queryset = Order.objects.prefetch_related(
+        'order_items',
+        'order_items__product',
+        'order_items__product__brand',
+        'payment_status',
+    ).all()
+    serializer_class = OrderListSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
@@ -16,8 +30,14 @@ class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateMod
             queryset = Order.objects.all()
             return queryset
         elif self.request.method == 'GET':
-            user = self.request.user
-            queryset = Order.objects.filter(user=user)
+            # user = self.request.user
+            user_db = UserProfile.objects.get(id=18)
+            queryset = Order.objects.filter(user=user_db).prefetch_related(
+                'order_items',
+                'order_items__product',
+                'order_items__product__brand',
+                'payment_status'
+            ).all()
             return queryset
 
     def get_serializer_class(self):
@@ -26,7 +46,6 @@ class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateMod
         return OrderListSerializer
 
     def post(self, request, *args, **kwargs):
-
         return self.create(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -36,7 +55,7 @@ class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateMod
 class OrderDetailView(mixins.UpdateModelMixin, GenericAPIView):
     serializer_class = OrderUpdateSerializer
     queryset = Order
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
 
     def patch(self, request, *args, **kwargs):

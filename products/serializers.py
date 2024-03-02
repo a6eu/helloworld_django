@@ -53,7 +53,3 @@ class ProductReadSerializer(serializers.ModelSerializer):
         if instance.brand:
             return instance.brand.logo_url.url
 
-    # def get_image_url(self, instance):
-    #     if instance.image:
-    #         return instance.image.url
-    #     return None

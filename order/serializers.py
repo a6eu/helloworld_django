@@ -5,6 +5,12 @@ from .models import *
 from products.serializers import ProductReadSerializer
 
 
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentStatus
+        fields = ['status',]
+
+
 class OrderedProductsSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField()
     quantity = serializers.IntegerField()
@@ -46,13 +52,15 @@ class OrderDetailProductsSerializer(serializers.ModelSerializer):
 
 class OrderListSerializer(serializers.ModelSerializer):
     total_cost = serializers.SerializerMethodField(read_only=True)
+    payment_status = PaymentSerializer(read_only=True)
     order_items = OrderDetailProductsSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
         fields = ['id', 'created_at', 'updated_at', 'payment_status', 'order_status', 'total_cost', 'order_items']
 
-    def get_total_cost(self, obj):
+    @staticmethod
+    def get_total_cost(obj):
         return obj.total_cost
 
 
@@ -69,14 +77,14 @@ class OrderWriteSerializers(serializers.Serializer):
             'order_status',
             'created_at',
             'updated_at',
-            'price',
+
             'quantity'
         ]
         read_only_fields = ['total_price', 'payment_status', 'order_status']
 
     def create(self, validated_data):
         orders_data = validated_data.pop('order_items')
-        status_db = PaymentStatus.objects.get(status="cash")
+        status_db = PaymentStatus.objects.get(status="Cash")
         order = Order.objects.create(payment_status=status_db, **validated_data)
 
         for order_data in orders_data:

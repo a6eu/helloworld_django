@@ -24,7 +24,10 @@ class OrderedProducts(models.Model):
 
     @cached_property
     def cost(self):
-        return round(self.quantity * self.price, 2)
+        return round(self.quantity * self.product.price, 2)
+
+    def __str__(self):
+        return f"id: {self.id} order: {self.order} price: {self.price}  quantity: {self.quantity} created_at: {self.created_at}"
 
 
 class Order(models.Model):
@@ -36,7 +39,7 @@ class Order(models.Model):
         (COMPLETED, "completed"),
     ]
     user = models.ForeignKey(UserProfile, related_name="orders", on_delete=models.CASCADE)
-    payment_status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE)
+    payment_status = models.ForeignKey(PaymentStatus, related_name="payments", on_delete=models.CASCADE)
     order_status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PENDING)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
