@@ -202,7 +202,7 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
-    "https://93.190.242.142:9443",
+    "http://localhost:3001",
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
@@ -216,8 +216,8 @@ INTERNAL_IPS = [
 
 # REDIS_HOST = '0.0.0.0'
 # REDIS_PORT = '6379'
-# CELERY_BROKER_URL = 'redis://localhost:6379/0'
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 # CELERY_ACCEPT_CONTENT = ['application/json']
 # CELERY_TASK_SERIALIZER = 'json'
 # CELERY_RESULT_SERIALIZER = 'json'
