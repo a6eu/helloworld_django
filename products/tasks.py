@@ -7,6 +7,7 @@ from category.models import Category
 from django.core.files import File
 import json
 import os
+import xml.etree.ElementTree as ET
 
 
 @app.task()
@@ -48,38 +49,41 @@ def update_products():
 
 @app.task()
 def update_product_images():
-    articles = Product.objects.values_list('article', flat=True).distinct()
-    items = [{'ItemId': article} for article in articles if article]
+    items = Product.objects.values_list('article', flat=True).distinct()
+
+    root = ET.Element("Root")
+    for item in items:
+        if item:
+            ware_item = ET.SubElement(root, "WareItem")
+            item_id = ET.SubElement(ware_item, "ItemId")
+            item_id.text = item
+
+    xml_data = ET.tostring(root, encoding='unicode')
 
     url = "https://b2b.marvel.kz/Api/GetItemPhotos"
-    data = {
-        "user": "01itgroup04",
-        "password": "m_u_oOV8N1",
-        "responseFormat": 1,
-        "items": {"WareItem": items}
+    params = {
+        'user': '01itgroup04',
+        'password': 'm_u_oOV8N1',
+        'responseFormat': 1,
+        'items': xml_data
     }
 
-    response = requests.post(url, json=data)
+    response = requests.post(url, json=params)
     if response.status_code == 200:
         try:
-            data = response.json()
+            json_data = response.json()
         except ValueError:
             print("Ошибка: Полученный ответ не является валидным JSON.")
             return
 
-        if data and 'Body' in data and 'Photo' in data['Body']:
-            photos_data = data['Body']['Photo']
-            already_updated = set()  # Для отслеживания уже обновленных артикулов
-
-            for photo in photos_data:
+        # Обработка ответа и обновление img_url в базе данных
+        if json_data and 'Body' in json_data and 'Photo' in json_data['Body']:
+            for photo in json_data['Body']['Photo']:
                 big_image = photo.get('BigImage', {})
                 ware_article = big_image.get('WareArticle')
-
-                if ware_article not in already_updated:
-                    img_url = big_image.get('URL')
-                    if img_url:
-                        Product.objects.filter(article=ware_article).update(img_url=img_url)
-                        already_updated.add(ware_article)
+                img_url = big_image.get('URL')
+                if img_url and ware_article:
+                    Product.objects.filter(article=ware_article).update(img_url=img_url)
         else:
             print("Ошибка: Ответ от API не содержит ожидаемых данных.")
     else:

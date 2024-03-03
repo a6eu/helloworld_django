@@ -3,6 +3,7 @@ from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
+from rest_framework.exceptions import NotFound
 
 # Create your views here.
 
@@ -55,15 +56,22 @@ class ProductInBasketView(mixins.CreateModelMixin, GenericAPIView, mixins.ListMo
         return self.create(request, *args, **kwargs)
 
 
-class RemoveProductInBasketView(mixins.DestroyModelMixin, GenericAPIView):
-    queryset = ProductsInBasket.objects.all()
-    serializer_class = ProductsInBasketSerializer
+class RemoveOrPatchProductInBasketView(mixins.DestroyModelMixin, mixins.UpdateModelMixin, GenericAPIView):
     permission_classes = [IsAuthenticated]
 
+    def get_object(self):
+        try:
+            basket = Basket.objects.get(user=self.request.user)
+            return ProductsInBasket.objects.get(basket=basket, product_id=self.kwargs['pk'])
+        except ProductsInBasket.DoesNotExist:
+            raise NotFound("Product not found in basket")
+
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return DeleteOrPatchProduct
+
     def delete(self, request, *args, **kwargs):
-        basket = Basket.objects.get(user=self.request.user)
-        product_in_basket = ProductsInBasket.objects.get(basket_id=basket.id, product_id=self.kwargs['pk'])
-        product_in_basket.delete()
+        return super().destroy(request, *args, **kwargs)
 
-        return Response({"message": "Product cleared successfully"}, status=status.HTTP_200_OK)
-
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)

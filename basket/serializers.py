@@ -63,3 +63,17 @@ class AddProductsInBasketSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductsInBasket
         fields = ['id', 'product_id', 'quantity']
+
+
+class DeleteOrPatchProduct(serializers.ModelSerializer):
+    class Meta:
+        model = ProductsInBasket
+        fields = ['product', 'quantity']
+        extra_kwargs = {
+            'product': {'read_only': True}
+        }
+
+    def validate_quantity(self, value):
+        if value < 1:
+            raise serializers.ValidationError("Quantity must be at least 1")
+        return value
