@@ -32,7 +32,7 @@ class ProductListCreateView(ListModelMixin, CreateModelMixin, GenericAPIView):
     serializer_class = ProductSearchCreateSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_class = ProductFilter
-    search_fields = ['name', 'description']
+    search_fields = ['name', 'description', 'article']
     pagination_class = PageNumberPagination
 
     def get(self, request, *args, **kwargs):
