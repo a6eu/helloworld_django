@@ -41,11 +41,13 @@ class FavoritesAddDeleteView(mixins.CreateModelMixin, mixins.DestroyModelMixin, 
 
         serializer.save(user=user, product=product)
 
-    def perform_destroy(self, instance):
+    def get_object(self):
         user = self.request.user
-        product = instance.product
+        product_id = self.kwargs['pk']
+        product = generics.get_object_or_404(Product, id=product_id)
 
-        if not Favorites.objects.filter(user=user, product=product).exists():
-            raise serializers.ValidationError("Product is not in favorites.")
+        favorite = generics.get_object_or_404(Favorites, user=user, product=product)
+        return favorite
 
+    def perform_destroy(self, instance):
         instance.delete()
