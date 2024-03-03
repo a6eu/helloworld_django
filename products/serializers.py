@@ -12,7 +12,7 @@ class ProductSearchCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("id", "name", "price", "description", "brand", "category", "rating_total", "img_url", "quantity")
+        fields = ("id", 'article', "name", "price", "description", "brand", "category", "rating_total", "img_url", "quantity")
 
 
 class ProductUpdateSerializer(serializers.ModelSerializer):
@@ -47,7 +47,7 @@ class ProductReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'description', 'img_url', 'brand_logo_url', 'price']
+        fields = ['id', 'article', 'name', 'description', 'img_url', 'brand_logo_url', 'price']
 
     def get_brand_logo_url(self, instance):
         if instance.brand:
