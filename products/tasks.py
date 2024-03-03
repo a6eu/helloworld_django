@@ -1,6 +1,6 @@
 from site_market.celery import app
 import requests
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from .models import Product
 from brand.models import Brand
 from category.models import Category
@@ -108,17 +108,26 @@ def save_product(product_data):
         quantity = int(quantity_str)
     except ValueError:
         quantity = 0
+    price_str = product_data.get('WarePriceKZT', '0').replace(',', '.')
+    try:
+        price = Decimal(price_str)
+    except (InvalidOperation, ValueError):
+        price = Decimal('0')
 
+    if price <= 0:
+        return
+
+    # Create or update the product
     product, created = Product.objects.update_or_create(
         name=product_data.get('WareFullName'),
         defaults={
-            'price': Decimal(product_data.get('WarePriceKZT').replace(',', '.')),
+            'price': price,
             'description': '',
             'rating_total': 0,
             'category': category,
             'brand': brand,
             'quantity': quantity,
             'article': product_data.get('WareArticle')
-            # 'img_url':
+            # 'img_url':  # Add image URL handling if required
         }
     )
