@@ -50,3 +50,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
             return instance.image.url
         return None
 
+
+class AllUsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'

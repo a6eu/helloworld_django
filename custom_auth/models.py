@@ -52,8 +52,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone_number = models.CharField(validators=[phone_number_regex], unique=True, max_length=10)
-    email = models.EmailField(max_length=255, unique=True)
+    phone_number = models.CharField(validators=[phone_number_regex], unique=True, max_length=10, db_index=True)
+    email = models.EmailField(max_length=255, unique=True, db_index=True)
     username = models.CharField(max_length=255, unique=False)
     gender = models.CharField(max_length=255, blank=True, null=True, choices=CHOICES)
     birth_day = models.DateField(blank=True, null=True)
