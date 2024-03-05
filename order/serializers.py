@@ -44,7 +44,11 @@ class OrderDetailProductsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderedProducts
-        fields = ['product', 'quantity', 'cost']
+        fields = [
+            'product',
+            'quantity',
+            'cost'
+        ]
 
     def get_cost(self, obj):
         return obj.cost
@@ -57,7 +61,21 @@ class OrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'created_at', 'updated_at', 'payment_status', 'order_status', 'total_cost', 'order_items']
+        fields = [
+            'id',
+            'created_at',
+            'updated_at',
+            'address',
+            'floor',
+            'flat',
+            'comment_for_address',
+            'recipient_name',
+            'recipient_phone',
+            'payment_status',
+            'order_status',
+            'total_cost',
+            'order_items'
+        ]
 
     @staticmethod
     def get_total_cost(obj):
@@ -67,20 +85,32 @@ class OrderListSerializer(serializers.ModelSerializer):
 class OrderWriteSerializers(serializers.Serializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     order_items = OrderedProductsSerializer(many=True)
+    address = serializers.CharField(max_length=255, allow_null=False)
+    floor = serializers.IntegerField()
+    flat = serializers.IntegerField()
+    comment_for_address = serializers.CharField(max_length=None, allow_blank=True, allow_null=True)
+    recipient_name = serializers.CharField(max_length=100, allow_null=True)
+    recipient_phone = serializers.CharField(max_length=100)
 
     class Meta:
         model = Order
         fields = [
+            'order_items',
             "total_price",
             'user',
             'payment_status',
             'order_status',
             'created_at',
             'updated_at',
-
-            'quantity'
+            'address',
+            'floor',
+            'flat',
+            'comment_for_address',
+            'recipient_name',
+            'recipient_phone',
+            'quantity',
         ]
-        read_only_fields = ['total_price', 'payment_status', 'order_status']
+        read_only_fields = ['total_price', 'payment_status', 'order_status', ]
 
     def create(self, validated_data):
         orders_data = validated_data.pop('order_items')
@@ -89,10 +119,11 @@ class OrderWriteSerializers(serializers.Serializer):
 
         for order_data in orders_data:
             product_id = order_data['product_id']
-            product = Product.objects.filter(pk=product_id).first()
+            product = Product.objects.get(pk=product_id)
             product.quantity = product.quantity - order_data['quantity']
             product.save()
-            OrderedProducts.objects.create(order=order, **order_data)
+
+            OrderedProducts.objects.create(order=order, price=product.price, **order_data)
 
         return order
 

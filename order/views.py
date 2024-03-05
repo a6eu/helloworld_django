@@ -31,7 +31,6 @@ class OrderView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateMod
             return queryset
         elif self.request.method == 'GET':
             user = self.request.user
-            # user_db = UserProfile.objects.get(id=18)
             queryset = Order.objects.filter(user=user).prefetch_related(
                 'order_items',
                 'order_items__product',
