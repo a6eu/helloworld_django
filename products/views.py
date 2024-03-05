@@ -9,7 +9,7 @@ from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
 class ProductDetailView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.select_related('brand', 'category')
     serializer_class = None
 
     def get_serializer_class(self):
@@ -28,7 +28,7 @@ class ProductDetailView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin,
 
 
 class ProductListCreateView(ListModelMixin, CreateModelMixin, GenericAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.select_related('brand', 'category')
     serializer_class = ProductSearchCreateSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_class = ProductFilter
