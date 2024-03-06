@@ -216,8 +216,10 @@ INTERNAL_IPS = [
 
 # REDIS_HOST = '0.0.0.0'
 # REDIS_PORT = '6379'
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+REDIS_HOST = 'redis'
+REDIS_PORT = 6379
 # CELERY_ACCEPT_CONTENT = ['application/json']
 # CELERY_TASK_SERIALIZER = 'json'
 # CELERY_RESULT_SERIALIZER = 'json'
@@ -228,3 +230,10 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 #         'schedule': timedelta(minutes=5),
 #     },
 # }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'abeubazekadilnegrila@gmail.com'
+EMAIL_HOST_PASSWORD = 'scto hjgk jtev xndq '
+EMAIL_PORT = 587

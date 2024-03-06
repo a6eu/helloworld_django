@@ -14,8 +14,8 @@ app.conf.beat_schedule = {
     #     'task': 'category.tasks.update_categories',
     #     'schedule': crontab(minute='*/5')
     # },
-    'get_products_every_5_minutes': {
-        'task': 'products.tasks.update_product_images',
-        'schedule': crontab(minute='*/20'),
-    },
+    # 'get_products_every_5_minutes': {
+    #     'task': 'products.tasks.update_product_images',
+    #     'schedule': crontab(minute='*/20'),
+    # },
 }

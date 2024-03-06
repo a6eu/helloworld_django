@@ -36,8 +36,7 @@ services:
       - '8000:8000'
     volumes:
       - .:/code
-    command: >
-#      sh -c "python manage.py runserver 0.0.0.0:8000"
+#    command: gunicorn site_market.wsgi:application --bind 0.0.0.0:8000
 
   worker:
     restart: always
@@ -45,10 +44,10 @@ services:
     volumes:
       - ./:/code
     depends_on:
-      - redis
       - webapp
-    command: > 
-#      sh -c "celery -A site_market worker -l info"
+      - redis
+#    entrypoint: ["/bin/sh", "-c"]
+    command: celery -A site_market worker -l info
 
   beat:
     restart: always
@@ -56,11 +55,11 @@ services:
     volumes:
       - ./:/code
     depends_on:
-      - redis
       - webapp
+      - redis
       - worker
-    command: > 
-#      sh -c "celery -A site_market beat -l info"
+#    entrypoint: ["/bin/sh", "-c"]
+    command: celery -A site_market beat -l info
 
 
 networks:
