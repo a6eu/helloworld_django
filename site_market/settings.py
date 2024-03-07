@@ -216,10 +216,9 @@ INTERNAL_IPS = [
 
 # REDIS_HOST = '0.0.0.0'
 # REDIS_PORT = '6379'
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
-REDIS_HOST = 'redis'
-REDIS_PORT = 6379
+REDIS_URL = "redis://redis:6379/1"
+CELERY_BROKER_URL = 'redis://redis:6379/1'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
 # CELERY_ACCEPT_CONTENT = ['application/json']
 # CELERY_TASK_SERIALIZER = 'json'
 # CELERY_RESULT_SERIALIZER = 'json'
