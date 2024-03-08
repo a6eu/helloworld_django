@@ -69,12 +69,12 @@ class RegisterUserView(generics.GenericAPIView, mixins.CreateModelMixin):
             return Response({'error': 'Этот номер телефона уже зарегестрирован!'},
                             status=status.HTTP_400_BAD_REQUEST)
         else:
-            email = request.data.get('email')
-            send_email_task.delay('Account registration successful',
-                                  'Your account has been registered successfully.',
-                                  'abeubazekadilnegrila@gmail.com',
-                                  [email],
-                                  )
+            # email = request.data.get('email')
+            # send_email_task.delay('Account registration successful',
+            #                       'Your account has been registered successfully.',
+            #                       'abeubazekadilnegrila@gmail.com',
+            #                       [email],
+            #                       )
             return self.create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
