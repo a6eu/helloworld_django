@@ -16,9 +16,12 @@ class AdminOnly(BasePermission):
 
 class NewsListCreateView(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
     pagination_class = PageNumberPagination
-
-    serializer_class = NewsListCreateSerializer
     queryset = News.objects.select_related('created_by').all()
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return NewsCreateSerializer
+        return NewsListSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

@@ -4,8 +4,8 @@ from django.core import validators
 from django.utils import timezone
 from django.utils.functional import cached_property
 from products.models import Product
-# Create your models here.
 from django.core.validators import RegexValidator
+
 
 class PaymentStatus(models.Model):
     status = models.CharField(max_length=255)
