@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'brand.apps.BrandConfig',
     'category.apps.CategoryConfig',
     'custom_auth.apps.AuthConfig',
+    'demand.apps.DemandConfig',
     'news.apps.NewsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
