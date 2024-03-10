@@ -33,10 +33,12 @@ class OrderedProducts(models.Model):
 class Order(models.Model):
     PENDING = "P"
     COMPLETED = "C"
+    ON_THE_WAY = "O"
 
     STATUS_CHOICES = [
         (PENDING, "pending"),
         (COMPLETED, "completed"),
+        (ON_THE_WAY, 'on_the_way')
     ]
     phone_number_regex = RegexValidator(
         regex=r'\d{10}$', message="Numbers without +7/8"
