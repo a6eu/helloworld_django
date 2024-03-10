@@ -20,7 +20,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         list_serializer_class = FilterReviewSerializer
         model = Category
-        fields = ("id", "name", "children")
+        fields = ("id", "categoryId", "name", "children")
 
     def get_image_url(self, instance):
         if instance.image:
@@ -31,4 +31,4 @@ class CategorySerializer(serializers.ModelSerializer):
 class CategoryNameIdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ("id", "name",)
+        fields = ("id", "name", "categoryId")
