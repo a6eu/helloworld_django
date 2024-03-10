@@ -16,9 +16,7 @@ class BasketView(mixins.CreateModelMixin, GenericAPIView, mixins.RetrieveModelMi
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        return Basket.objects.select_related('user').prefetch_related('products__product').annotate(
-            latest_addition=Max('products__created_at')
-        ).order_by('-latest_addition')
+        return Basket.objects.select_related('user').prefetch_related('products__product').order_by('products__created_at')
 
     def get(self, request, *args, **kwargs):
         basket = get_object_or_404(Basket, user=request.user)
@@ -68,9 +66,16 @@ class RemoveOrPatchProductInBasketView(mixins.DestroyModelMixin, mixins.UpdateMo
     def get_object(self):
         try:
             basket = Basket.objects.get(user=self.request.user)
-            return ProductsInBasket.objects.get(basket=basket, product_id=self.kwargs['pk'])
-        except ProductsInBasket.DoesNotExist:
-            raise NotFound("Product not found in basket")
+            product_in_basket = ProductsInBasket.objects.filter(
+                basket=basket, product_id=self.kwargs['pk']
+            ).order_by('-created_at')
+
+            if product_in_basket.exists():
+                return product_in_basket.first()
+            else:
+                raise NotFound("Product not found in basket")
+        except Basket.DoesNotExist:
+            raise NotFound("Basket not found")
 
     def get_serializer_class(self):
         if self.request.method == 'PATCH':
