@@ -28,7 +28,7 @@ class ProductDetailView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin,
 
 
 class ProductListCreateView(ListModelMixin, CreateModelMixin, GenericAPIView):
-    queryset = Product.objects.select_related('brand', 'category')
+    queryset = Product.objects.select_related('brand', 'category').all()
     serializer_class = ProductSearchCreateSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_class = ProductFilter
