@@ -3,7 +3,15 @@ from rest_framework import serializers, status
 from .models import News
 
 
-class NewsListCreateSerializer(serializers.ModelSerializer):
+class NewsCreateSerializer(serializers.ModelSerializer):
+    created_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = News
+        fields = ['title', 'content', 'image', 'created_by']
+
+
+class NewsListSerializer(serializers.ModelSerializer):
     created_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
