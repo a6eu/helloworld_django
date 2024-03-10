@@ -10,7 +10,7 @@ class ProductsInBasketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductsInBasket
-        fields = ["id", 'product', "quantity", "total_price"]
+        fields = ["id", 'product', "quantity", "total_price", "created_at"]
 
     def get_total_price(self, product_item: ProductsInBasket):
         return product_item.quantity * product_item.product.price

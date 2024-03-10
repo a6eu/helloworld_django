@@ -17,3 +17,5 @@ class ProductsInBasket(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='products')
     quantity = models.IntegerField(validators=[validators.MinValueValidator(1)])
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)

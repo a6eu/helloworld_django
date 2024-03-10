@@ -4,15 +4,21 @@ from rest_framework.mixins import *
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from rest_framework.exceptions import NotFound
+from django.db.models import Max
 
 # Create your views here.
 
 
 class BasketView(mixins.CreateModelMixin, GenericAPIView, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
-    queryset = Basket.objects.select_related('user').prefetch_related('products__product').all()
+
     serializer_class = BasketSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        return Basket.objects.select_related('user').prefetch_related('products__product').annotate(
+            latest_addition=Max('products__created_at')
+        ).order_by('-latest_addition')
 
     def get(self, request, *args, **kwargs):
         basket = get_object_or_404(Basket, user=request.user)
