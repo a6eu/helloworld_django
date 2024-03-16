@@ -16,7 +16,7 @@ class BasketView(mixins.CreateModelMixin, GenericAPIView, mixins.RetrieveModelMi
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        return Basket.objects.select_related('user').prefetch_related('products__product')
+        return Basket.objects.select_related('user').prefetch_related('products__product').order_by('products__created_at')
 
     def get(self, request, *args, **kwargs):
         basket = get_object_or_404(Basket, user=request.user)
@@ -68,7 +68,8 @@ class RemoveOrPatchProductInBasketView(mixins.DestroyModelMixin, mixins.UpdateMo
             basket = Basket.objects.get(user=self.request.user)
             product_in_basket = ProductsInBasket.objects.filter(
                 basket=basket, product_id=self.kwargs['pk']
-            )
+            ).order_by('-created_at')
+
             if product_in_basket.exists():
                 return product_in_basket.first()
             else:
