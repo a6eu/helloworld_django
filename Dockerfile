@@ -11,11 +11,7 @@ FROM python:3.10
 WORKDIR /code
 COPY --from=requirements-stage /tmp/requirements.txt .
 RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
-COPY . .
-
-COPY ./entrypoint.sh .
-RUN chmod +x /code/entrypoint.sh
 
 COPY . .
 
-ENTRYPOINT ["/code/entrypoint.sh"]
+ENTRYPOINT ["sh", "/launsh.sh"]
