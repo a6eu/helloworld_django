@@ -13,5 +13,5 @@ COPY --from=requirements-stage /tmp/requirements.txt .
 RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 
 COPY . .
-
-ENTRYPOINT ["sh", "/launsh.sh"]
+RUN chmod +x /code/launch.sh
+ENTRYPOINT ["sh", "launch.sh"]
