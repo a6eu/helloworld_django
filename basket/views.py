@@ -69,7 +69,6 @@ class RemoveOrPatchProductInBasketView(mixins.DestroyModelMixin, mixins.UpdateMo
             product_in_basket = ProductsInBasket.objects.filter(
                 basket=basket, product_id=self.kwargs['pk']
             )
-
             if product_in_basket.exists():
                 return product_in_basket.first()
             else:
@@ -80,8 +79,6 @@ class RemoveOrPatchProductInBasketView(mixins.DestroyModelMixin, mixins.UpdateMo
     def get_serializer_class(self):
         if self.request.method == 'PATCH':
             return DeleteOrPatchProduct
-        elif self.request.method == 'DELETE':
-            return None
 
     def delete(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-si5#i)^twvs-l7v2l)rw7$45y0-t%m3$%gaz_8$8mwf2cr8c$@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", "93.190.242.142"]
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = 'custom_auth.UserProfile'
 
@@ -205,6 +205,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
     "http://localhost:3001",
+    "http://localhost:45096",
+    
 ]
 
 DEBUG_TOOLBAR_CONFIG = {

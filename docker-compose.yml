@@ -36,6 +36,7 @@ services:
       - '8000:8000'
     volumes:
       - .:/code
+      - static_volume:/code/static
 #    command: gunicorn site_market.wsgi:application --bind 0.0.0.0:8000
 
   worker:
@@ -71,3 +72,4 @@ networks:
 
 volumes:
   postgres-data:
+  static_volume:

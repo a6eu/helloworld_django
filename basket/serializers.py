@@ -27,12 +27,6 @@ class BasketSerializer(serializers.ModelSerializer):
     def get_total_price(self, product):
         return sum([product.quantity * product.product.price for product in product.products.all()])
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        sorted_products = sorted(representation['products'], key=lambda x: x['product']['id'])
-        representation['products'] = sorted_products
-        return representation
-
 
 class AddProductsInBasketSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField()

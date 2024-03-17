@@ -11,7 +11,7 @@ FROM python:3.10
 WORKDIR /code
 COPY --from=requirements-stage /tmp/requirements.txt .
 RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
+
 COPY . .
-
-
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "site_market.wsgi:application"]
+RUN chmod +x /code/launch.sh
+ENTRYPOINT ["sh", "launch.sh"]
