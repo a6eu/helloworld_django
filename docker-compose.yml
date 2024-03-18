@@ -5,9 +5,9 @@ services:
    image: postgres:16.2
    restart: always
    environment:
-       POSTGRES_DB=helloworld_django_db
-       POSTGRES_USER=helloworld_django
-       POSTGRES_PASSWORD=helloworld_django_2024_65
+     - POSTGRES_DB=helloworld_django_db
+     - POSTGRES_USER=helloworld_django
+     - POSTGRES_PASSWORD=helloworld_django_2024_65
    volumes:
      - postgres-data:/var/lib/postgresql/data
    networks:
