@@ -136,7 +136,7 @@ DATABASES = {
         'NAME': 'helloworld_db',
         'USER': 'adminshop',
         'PASSWORD': 'helloworld_coc_2024',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
