@@ -16,7 +16,7 @@ services:
    ports:
      - '5432:5432'
 
-redis:
+ redis:
    image: redis
    restart: always
    ports:
@@ -24,7 +24,7 @@ redis:
    networks:
      - manage_project
 
-webapp:
+ webapp:
    build:
      context: .
      dockerfile: Dockerfile
@@ -40,7 +40,7 @@ webapp:
      - static_volume:/code/static
 #    command: gunicorn site_market.wsgi:application --bind 0.0.0.0:8000
 
-worker:
+ worker:
    restart: always
    build: .
    volumes:
@@ -53,7 +53,7 @@ worker:
    networks:
      - manage_project
 
-beat:
+ beat:
    restart: always
    build: .
    volumes:
