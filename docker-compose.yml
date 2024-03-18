@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
  db:
-   image: postgres:16.2
+   image: postgres:latest
    restart: always
    environment:
-     - POSTGRES_DB=helloworld_django_db
-     - POSTGRES_USER=helloworld_django
-     - POSTGRES_PASSWORD=helloworld_django_2024_65
+     - POSTGRES_USER=postgres_helloworld_user
+     - POSTGRES_PASSWORD=helloworld_django_coc_2024
+     - POSTGRES_DB=helloworld_django
    volumes:
      - postgres-data:/var/lib/postgresql/data
    networks:
