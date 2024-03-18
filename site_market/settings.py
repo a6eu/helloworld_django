@@ -133,11 +133,11 @@ WSGI_APPLICATION = 'site_market.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'helloworld_db',
-        'USER': 'adminshop',
-        'PASSWORD': 'helloworld_coc_2024',
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': '16gDgfFF4bf3f-63d2DgdGG15-e6B*43',
+        'HOST': 'monorail.proxy.rlwy.net',
+        'PORT': '58877',
     }
 }
 
