@@ -2,69 +2,70 @@ version: '3.8'
 
 services:
  db:
-   image: postgres:latest
+   image: postgres:16.2
    restart: always
    environment:
-     - POSTGRES_USER=postgres_helloworld_user
-     - POSTGRES_PASSWORD=helloworld_django_coc_2024
-     - POSTGRES_DB=helloworld_django
+     POSTGRES_DB: CREATE DATABASE helloworld_db;
+     POSTGRES_USER: adminshop
+     POSTGRES_PASSWORD: helloworld_coc_2024
    volumes:
      - postgres-data:/var/lib/postgresql/data
+
    networks:
      - manage_project
    ports:
      - '5432:5432'
 
-  redis:
-    image: redis
-    restart: always
-    ports:
-      - "6379:6379"
-    networks:
-      - manage_project
-
-  webapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
+# redis:
+#    image: redis
+#    restart: always
+#    ports:
+#      - "6379:6379"
+#    networks:
+#      - manage_project
+#
+# webapp:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    depends_on:
 #      - db
-      - redis
-    networks:
-      - manage_project
-    ports:
-      - '8000:8000'
-    volumes:
-      - .:/code
-      - static_volume:/code/static
-#    command: gunicorn site_market.wsgi:application --bind 0.0.0.0:8000
-
-  worker:
-    restart: always
-    build: .
-    volumes:
-      - ./:/code
-    depends_on:
-      - webapp
-      - redis
-#    entrypoint: ["/bin/sh", "-c"]
-    command: celery -A site_market worker -l info
-    networks:
-      - manage_project
-
-  beat:
-    restart: always
-    build: .
-    volumes:
-      - ./:/code
-    depends_on:
-      - webapp
-      - redis
-      - worker
-#    entrypoint: ["/bin/sh", "-c"]
-    command: celery -A site_market beat -l info
-    networks:
-      - manage_project
+#      - redis
+#    networks:
+#      - manage_project
+#    ports:
+#      - '8000:8000'
+#    volumes:
+#      - .:/code
+#      - static_volume:/code/static
+##    command: gunicorn site_market.wsgi:application --bind 0.0.0.0:8000
+#
+# worker:
+#    restart: always
+#    build: .
+#    volumes:
+#      - ./:/code
+#    depends_on:
+#      - webapp
+#      - redis
+##    entrypoint: ["/bin/sh", "-c"]
+#    command: celery -A site_market worker -l info
+#    networks:
+#      - manage_project
+#
+# beat:
+#    restart: always
+#    build: .
+#    volumes:
+#      - ./:/code
+#    depends_on:
+#      - webapp
+#      - redis
+#      - worker
+##    entrypoint: ["/bin/sh", "-c"]
+#    command: celery -A site_market beat -l info
+#    networks:
+#      - manage_project
 
 
 networks:
