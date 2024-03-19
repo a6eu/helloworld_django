@@ -36,7 +36,7 @@ urlpatterns = [
     path("api/v1/auth/", include("custom_auth.urls")),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
-        "docs/",
+        "api/docs/",
         SpectacularSwaggerView.as_view(
             template_name="swagger-ui.html", url_name="schema"
         ),
