@@ -136,7 +136,7 @@ DATABASES = {
         'NAME': 'mydatabase',
         'USER': 'myuser',
         'PASSWORD': 'helloworld_db_coc_2024',
-        'HOST': '93.190.242.142',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
