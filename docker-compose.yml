@@ -6,6 +6,9 @@ services:
     container_name: db
     ports:
       - "9443:5432"
+    expose:
+      - "9443"
+    command: -p 9443
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: helloworld_db_coc_2024
