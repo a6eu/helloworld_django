@@ -23,10 +23,15 @@ class BrandListView(mixins.ListModelMixin, GenericAPIView):
         return self.list(request, *args, **kwargs)
 
 
+class BrandCreateAPIView(CreateAPIView):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+
+
 class BrandDetailView(mixins.RetrieveModelMixin, GenericAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-    lookup_field = 'name'
+    lookup_field = 'id'
 
     def get(self, request, *args, **kwargs):
         filter_kwargs = {'name__icontains': kwargs['name']}
@@ -35,3 +40,7 @@ class BrandDetailView(mixins.RetrieveModelMixin, GenericAPIView):
         return Response(serializer.data)
 
 
+class BrandUpdateAPIView(UpdateAPIView):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+    lookup_field = 'id'

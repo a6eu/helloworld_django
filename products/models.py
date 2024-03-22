@@ -14,6 +14,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, related_name="brands", on_delete=models.CASCADE, null=True)
     img_url = models.CharField(null=True, blank=True)
     quantity = models.IntegerField()
+    img_file = models.ImageField(upload_to="01it.group/products/", null=True, blank=True)
 
     def __str__(self):
         return self.name

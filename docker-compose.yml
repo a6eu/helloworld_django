@@ -1,19 +1,19 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:15-alpine
-    container_name: db
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: helloworld_db_coc_2024
-      POSTGRES_DB: mydatabase
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    networks:
-      - marketplace
+#  db:
+#    image: postgres:15-alpine
+#    container_name: db
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      POSTGRES_USER: myuser
+#      POSTGRES_PASSWORD: helloworld_db_coc_2024
+#      POSTGRES_DB: mydatabase
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+#    networks:
+#      - marketplace
 
 
   redis:
@@ -29,7 +29,7 @@ services:
      context: .
      dockerfile: Dockerfile
    depends_on:
-     - db
+#     - db
      - redis
    networks:
      - marketplace

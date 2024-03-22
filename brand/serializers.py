@@ -5,7 +5,8 @@ from .models import Brand
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'logo_url']
+        read_only_fields = ['id']
 
     def get_image_url(self, instance):
         if instance.image:
