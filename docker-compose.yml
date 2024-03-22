@@ -43,19 +43,21 @@ services:
   worker:
    restart: always
    build: .
+   command: celery -A site_market worker -l info
    volumes:
      - ./:/code
    depends_on:
      - webapp
      - redis
 #    entrypoint: ["/bin/sh", "-c"]
-   command: celery -A site_market worker -l info
+   
    networks:
      - marketplace
 
   beat:
    restart: always
    build: .
+   command: celery -A site_market beat -l info
    volumes:
      - ./:/code
    depends_on:
@@ -63,7 +65,7 @@ services:
      - redis
      - worker
 #    entrypoint: ["/bin/sh", "-c"]
-   command: celery -A site_market beat -l info
+  
    networks:
      - marketplace
 
