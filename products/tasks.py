@@ -7,6 +7,7 @@ from category.models import Category
 from django.core.files import File
 import json
 import os
+from django.core.files.base import ContentFile
 import xml.etree.ElementTree as ET
 
 
@@ -76,14 +77,17 @@ def update_product_images():
             print("Ошибка: Полученный ответ не является валидным JSON.")
             return
 
-        # Обработка ответа и обновление img_url в базе данных
         if json_data and 'Body' in json_data and 'Photo' in json_data['Body']:
             for photo in json_data['Body']['Photo']:
                 big_image = photo.get('BigImage', {})
                 ware_article = big_image.get('WareArticle')
                 img_url = big_image.get('URL')
                 if img_url and ware_article:
-                    Product.objects.filter(article=ware_article).update(img_url=img_url)
+                    img_response = requests.get(img_url)
+                    if img_response.status_code == 200:
+                        product = Product.objects.get(article=ware_article)
+                        img_name = img_url.split("/")[-1]
+                        product.img_url.save(img_name, ContentFile(img_response.content), save=True)
         else:
             print("Ошибка: Ответ от API не содержит ожидаемых данных.")
     else:

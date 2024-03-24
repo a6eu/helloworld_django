@@ -12,7 +12,7 @@ class ProductSearchCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("id", 'article', "name", "price", "description", "brand", "category", "rating_total", "img_url", "quantity", "img_file")
+        fields = ("id", 'article', "name", "price", "description", "brand", "category", "rating_total", "img_url", "quantity")
 
 
 class ProductUpdateSerializer(serializers.ModelSerializer):
